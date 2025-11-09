@@ -81,10 +81,19 @@ The service will be available on `http://localhost:8080`.
 
 Notes:
 
+- The `/health` endpoint returns `OK` and is used for container health checks.
 - The `/api/checkinout` endpoint still requires `username` and `password` to be provided in the request body (JSON). The container does not inject credentials automatically.
 - If you wish to pass any runtime environment variables, add them to the `docker-compose.yml` `environment` section or provide an `.env` file consumed by Compose.
 
 ## API
+
+### Healthcheck
+
+GET /health
+
+Returns `OK` if the service is running.
+
+---
 
 POST /api/checkinout
 

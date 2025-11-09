@@ -16,6 +16,11 @@ func main() {
 
 	checkinout.RegisterRoutes(app)
 
+	// Healthcheck endpoint
+	app.Get("/health", func(c *fiber.Ctx) error {
+		return c.SendString("OK")
+	})
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
