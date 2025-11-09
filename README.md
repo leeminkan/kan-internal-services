@@ -59,20 +59,34 @@ go run main.go
 
 You can build and run the service in a container using the provided `Dockerfile`.
 
-#### Multi-arch builds (amd64/arm64)
+#### Multi-arch builds (amd64/arm64) with Docker Buildx
 
-The Dockerfile and Compose setup support building for different CPU architectures using the `BUILDARCH` build argument.
+To build images for different CPU architectures (e.g., amd64 for Intel/PC, arm64 for Apple Silicon), use Docker Buildx:
 
-Build the image for amd64 (default):
+1. Enable Buildx (if not already):
 
 ```sh
-docker build --build-arg BUILDARCH=amd64 -t kan-internal-services:amd64 .
+docker buildx create --use
 ```
 
-Build the image for arm64:
+2. Build for amd64 (Intel/PC):
 
 ```sh
-docker build --build-arg BUILDARCH=arm64 -t kan-internal-services:arm64 .
+docker buildx build --platform linux/amd64 -t kan-internal-services:amd64 --load .
+```
+
+3. Build for arm64 (Apple Silicon):
+
+```sh
+docker buildx build --platform linux/arm64 -t kan-internal-services:arm64 --load .
+```
+
+You can then run the image as usual:
+
+```sh
+docker run --rm -p 8080:8080 -e PORT=8080 kan-internal-services:amd64
+# or
+docker run --rm -p 8080:8080 -e PORT=8080 kan-internal-services:arm64
 ```
 
 #### Run the container
@@ -83,15 +97,21 @@ docker run --rm -p 8080:8080 -e PORT=8080 kan-internal-services:amd64
 
 #### Docker Compose (recommended for development)
 
-You can also specify the architecture when using Compose:
+Docker Compose is best used for running images built for your host architecture, or after building with Buildx. If you want to use Compose to build and run for your host arch:
 
 ```sh
-# For amd64 (default)
-BUILDARCH=amd64 docker compose up --build -d
-
-# For arm64
-BUILDARCH=arm64 docker compose up --build -d
+docker compose up --build -d
 ```
+
+If you want to run a multi-arch image you built with Buildx:
+
+```sh
+# Example: run arm64 image on Apple Silicon
+docker compose up -d
+# (Make sure the image tag matches the one you built with Buildx)
+```
+
+If you need to build and run for a different architecture than your host, always use Buildx for the build step, then use Compose to run.
 
 The service will be available on `http://localhost:8080`.
 
