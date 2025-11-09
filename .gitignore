@@ -1,0 +1,45 @@
+# Binaries and build output
+/kan-internal-services
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+/build/
+/bin/
+
+# Go modules
+/go.sum
+/go.mod
+
+# Vendor directory (if you use `go mod vendor`)
+/vendor/
+
+# Environment files
+.env
+.env.*
+
+# Logs
+*.log
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Docker
+Dockerfile
+.dockerignore
+
+# OS files
+Thumbs.db
+
+# Test output
+coverage.out
+
+# Ignore example env
+.env.example

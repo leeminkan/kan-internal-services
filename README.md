@@ -55,6 +55,35 @@ Or use `go run` during development:
 go run main.go
 ```
 
+### Docker
+
+You can build and run the service in a container using the provided `Dockerfile`.
+
+Build the image locally:
+
+```sh
+docker build -t kan-internal-services:local .
+```
+
+Run the container:
+
+```sh
+docker run --rm -p 8080:8080 -e PORT=8080 kan-internal-services:local
+```
+
+Or use Docker Compose to build and run (recommended during development):
+
+```sh
+docker compose up --build -d
+```
+
+The service will be available on `http://localhost:8080`.
+
+Notes:
+
+- The `/api/checkinout` endpoint still requires `username` and `password` to be provided in the request body (JSON). The container does not inject credentials automatically.
+- If you wish to pass any runtime environment variables, add them to the `docker-compose.yml` `environment` section or provide an `.env` file consumed by Compose.
+
 ## API
 
 POST /api/checkinout
@@ -75,7 +104,7 @@ Example curl (explicit credentials):
 ```sh
 curl -X POST http://localhost:8080/api/checkinout \
   -H 'Content-Type: application/json' \
-  -d '{"username":"user@example.com","password":"secret"}'
+  -d '{"username":"phuchoangnguyen","password":"secret"}'
 ```
 
 Response (JSON):
