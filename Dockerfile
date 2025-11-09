@@ -1,8 +1,9 @@
 # Multi-stage Dockerfile for kan-internal-services
 
+
 # Builder stage
 ARG BUILDARCH=amd64
-FROM --platform=linux/${BUILDARCH} golang:1.21 AS builder
+FROM --platform=linux/${BUILDARCH} golang:1.21-bullseye AS builder
 WORKDIR /src
 
 # Cache dependencies
