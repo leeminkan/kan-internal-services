@@ -59,22 +59,38 @@ go run main.go
 
 You can build and run the service in a container using the provided `Dockerfile`.
 
-Build the image locally:
+#### Multi-arch builds (amd64/arm64)
+
+The Dockerfile and Compose setup support building for different CPU architectures using the `BUILDARCH` build argument.
+
+Build the image for amd64 (default):
 
 ```sh
-docker build -t kan-internal-services:local .
+docker build --build-arg BUILDARCH=amd64 -t kan-internal-services:amd64 .
 ```
 
-Run the container:
+Build the image for arm64:
 
 ```sh
-docker run --rm -p 8080:8080 -e PORT=8080 kan-internal-services:local
+docker build --build-arg BUILDARCH=arm64 -t kan-internal-services:arm64 .
 ```
 
-Or use Docker Compose to build and run (recommended during development):
+#### Run the container
 
 ```sh
-docker compose up --build -d
+docker run --rm -p 8080:8080 -e PORT=8080 kan-internal-services:amd64
+```
+
+#### Docker Compose (recommended for development)
+
+You can also specify the architecture when using Compose:
+
+```sh
+# For amd64 (default)
+BUILDARCH=amd64 docker compose up --build -d
+
+# For arm64
+BUILDARCH=arm64 docker compose up --build -d
 ```
 
 The service will be available on `http://localhost:8080`.

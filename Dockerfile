@@ -1,6 +1,8 @@
 # Multi-stage Dockerfile for kan-internal-services
+
 # Builder stage
-FROM golang:1.21 AS builder
+ARG BUILDARCH=amd64
+FROM --platform=linux/${BUILDARCH} golang:1.21 AS builder
 WORKDIR /src
 
 # Cache dependencies
@@ -9,11 +11,11 @@ RUN go mod download
 
 # Copy the rest of the sources and build
 COPY . .
-# Build without forcing CGO_ENABLED=0 (let Go use system defaults)
-RUN go build -ldflags="-s -w" -o /kan-internal-services
+# Force static build for Alpine compatibility and allow arch switching
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=${BUILDARCH} go build -ldflags="-s -w" -o /kan-internal-services
 
 # Final stage
-FROM alpine:3.18
+FROM --platform=$BUILDPLATFORM alpine:3.18
 RUN apk add --no-cache ca-certificates
 WORKDIR /app
 COPY --from=builder /kan-internal-services /app/kan-internal-services
