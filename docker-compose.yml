@@ -12,8 +12,8 @@ services:
       - PORT=${PORT:-8080}
     restart: unless-stopped
     networks:
-      - kan-internal-net
+      - kan_internal_net
 
 networks:
-  kan-internal-net:
-    driver: bridge
+  kan_internal_net:
+    name: bridge
