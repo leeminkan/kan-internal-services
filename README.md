@@ -93,6 +93,10 @@ GET /health
 
 Returns `OK` if the service is running.
 
+```sh
+curl http://localhost:8080/health
+```
+
 ---
 
 POST /api/checkinout
