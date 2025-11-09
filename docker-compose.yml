@@ -12,8 +12,8 @@ services:
       - PORT=${PORT:-8080}
     restart: unless-stopped
     networks:
-      - kan_internal_net
+      - kan_internal_services_net
 
 networks:
-  kan_internal_net:
-    name: bridge
+  kan_internal_services_net:
+    name: kan_internal_services_net
