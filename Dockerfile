@@ -9,7 +9,8 @@ RUN go mod download
 
 # Copy the rest of the sources and build
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o /kan-internal-services
+# Build without forcing CGO_ENABLED=0 (let Go use system defaults)
+RUN go build -ldflags="-s -w" -o /kan-internal-services
 
 # Final stage
 FROM alpine:3.18
